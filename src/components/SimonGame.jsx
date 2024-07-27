@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import GameBtn from "./GameBtn";
 
+const colors = ["green", "red", "yellow", "blue"];
+
 const SimonGame = () => {
+	//states
+	const [sequence, setSequence] = useState([]);
+	const [playing, setPlaying] = useState(false);
+
+	//functions
+	const handleNextLevel = () => {};
+
 	return (
 		/* Main container */
 		<div className=" relative flex justify-center items-center bg-neutral-900 w-screen h-screen">
@@ -19,7 +28,10 @@ const SimonGame = () => {
 				</div>
 				{/* Start Game */}
 				<div className="absolute flex justify-center items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-					<button className="flex justify-center items-center bg-black text-white rounded-full w-24 h-24">
+					<button
+						className="flex justify-center items-center bg-black text-white text-xl sm:text-2xl font-bold rounded-full w-[150px] sm:w-[175px] h-[150px] sm:h-[175px] duaration-200 hover:scale scale-105"
+						onClick={handleNextLevel}
+					>
 						Start Game
 					</button>
 				</div>
