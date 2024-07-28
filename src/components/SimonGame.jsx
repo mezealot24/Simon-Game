@@ -8,8 +8,31 @@ const SimonGame = () => {
 	const [sequence, setSequence] = useState([]);
 	const [playing, setPlaying] = useState(false);
 
+	// refs
+	const greenRef = useRef(null);
+	const redRef = useRef(null);
+	const yellowRef = useRef(null);
+	const blueRef = useRef(null);
+
 	//functions
-	const handleNextLevel = () => {};
+	const addNewColor = () => {
+		const color = colors[Math.floor(Math.random() * 4)];
+		const newSequnce = [...sequence, color];
+		setSequence(newSequnce);
+	};
+
+	// useEffect
+	useEffect(() => {
+		// show sequence
+		const showSequence = () => {};
+		showSequence();
+	}, [sequence]);
+
+	const handleNextLevel = () => {
+		if (!playing) {
+			addNewColor();
+		}
+	};
 
 	return (
 		/* Main container */
@@ -18,13 +41,13 @@ const SimonGame = () => {
 			<div className=" relative flex flex-col justify-center items-center animate-spin-slow">
 				{/* GameBtn Red, Green */}
 				<div className="flex justify-center items-center ">
-					<GameBtn color="bg-red-500 rounded-tl-[100%]" />
-					<GameBtn color="bg-green-500 rounded-tr-[100%]" />
+					<GameBtn color="bg-red-500 rounded-tl-[100%]" ref={redRef} />
+					<GameBtn color="bg-green-500 rounded-tr-[100%]" ref={greenRef} />
 				</div>
 				{/* GameBtn Yellow, Blue */}
 				<div className="flex justify-center items-center ">
-					<GameBtn color="bg-yellow-500 rounded-bl-[100%]" />
-					<GameBtn color="bg-blue-500 rounded-br-[100%]" />
+					<GameBtn color="bg-yellow-500 rounded-bl-[100%]" ref={yellowRef} />
+					<GameBtn color="bg-blue-500 rounded-br-[100%]" ref={blueRef} />
 				</div>
 				{/* Start Game */}
 				<div className="absolute flex justify-center items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
