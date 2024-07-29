@@ -4,9 +4,10 @@ import GameBtn from "./GameBtn";
 const colors = ["green", "red", "yellow", "blue"];
 
 const SimonGame = () => {
-	//states
+	// states
 	const [sequence, setSequence] = useState([]);
 	const [playing, setPlaying] = useState(false);
+	const [playerSequence, setPlayerSequence] = useState([]);
 
 	// refs
 	const redRef = useRef(null);
@@ -14,36 +15,35 @@ const SimonGame = () => {
 	const yellowRef = useRef(null);
 	const blueRef = useRef(null);
 
-	//functions
+	// functions
 	const addNewColor = () => {
 		const color = colors[Math.floor(Math.random() * 4)];
-		const newSequnce = [...sequence, color];
-		setSequence(newSequnce);
+		setSequence((prevSequence) => [...prevSequence, color]);
 	};
 
-	// useEffect
+	const resetGame = () => {
+		setSequence([]);
+		setPlaying(false);
+		setPlayerSequence([]);
+	};
+
+	const blinkButton = (color) => {
+		let ref = null;
+		if (color === "green") ref = greenRef;
+		if (color === "red") ref = redRef;
+		if (color === "yellow") ref = yellowRef;
+		if (color === "blue") ref = blueRef;
+
+		ref.current.classList.add("brightness-[2.5]");
+		setTimeout(() => {
+			ref.current.classList.remove("brightness-[2.5]");
+		}, 250);
+	};
+
 	useEffect(() => {
-		// show sequence
 		if (sequence.length > 0) {
-			const showSequence = (index = 0) => {
-				let ref = null;
-
-				if (sequence[index] === "green") ref = greenRef;
-				if (sequence[index] === "red") ref = redRef;
-				if (sequence[index] === "yellow") ref = yellowRef;
-				if (sequence[index] === "blue") ref = blueRef;
-
-				// blink the ref
-				setTimeout(() => {
-					ref.current.classList.add("brightness-[2.5]");
-
-					setTimeout(() => {
-						ref.current.classList.remove("brightness-[2.5]");
-						if (index < sequence.length - 1) showSequence(index + 1);
-					}, 250);
-				}, 250);
-			};
-			showSequence();
+			const lastColor = sequence[sequence.length - 1];
+			blinkButton(lastColor);
 		}
 	}, [sequence]);
 
@@ -57,6 +57,20 @@ const SimonGame = () => {
 	const handleColorClick = (e) => {
 		if (playing) {
 			const clickColor = e.target.getAttribute("color");
+			const newPlayerSequence = [...playerSequence, clickColor];
+			setPlayerSequence(newPlayerSequence);
+
+			// Check if the clicked color matches the sequence
+			if (clickColor !== sequence[playerSequence.length]) {
+				alert("Game Over! Your score: " + (sequence.length - 1));
+				resetGame();
+			} else if (newPlayerSequence.length === sequence.length) {
+				// Player completed the sequence correctly
+				setPlayerSequence([]);
+				setTimeout(() => {
+					addNewColor();
+				}, 250);
+			}
 		}
 	};
 
